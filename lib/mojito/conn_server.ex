@@ -29,6 +29,7 @@ defmodule Mojito.ConnServer do
   """
   @spec start_link(Keyword.t()) :: {:ok, pid} | {:error, any}
   def start_link(args \\ []) do
+    Logger.warn("starting mojito server")
     GenServer.start_link(__MODULE__, args)
   end
 
@@ -39,7 +40,7 @@ defmodule Mojito.ConnServer do
   @spec request(pid, pid, Mojito.method(), Mojito.headers(), String.t(), Keyword.t()) ::
           :ok | {:error, any}
   def request(pid, reply_to, method, url, headers \\ [], payload \\ "", opts \\ []) do
-    GenServer.call(pid, {:request, reply_to, method, url, headers, payload, opts})
+    GenServer.call(pid, {:request, reply_to, method, url, headers, payload, opts}, 15_000)
   end
 
   #### GenServer callbacks
